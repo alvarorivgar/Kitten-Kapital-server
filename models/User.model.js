@@ -1,23 +1,51 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const userSchema = new Schema(
   {
-    email: {
+    firstName: {
       type: String,
-      required: [true, 'Email is required.'],
+      required: true,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    idNumber: {
+      type: String,
+      required: true,
+      trim: true,
       unique: true,
       lowercase: true,
-      trim: true
+    },
+    dob: {
+      type: Date,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
-      required: [true, 'Password is required.']
-    }
+      required: [true, "Password is required."],
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user", "kitty"],
+    },
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dkz1jslyi/image/upload/v1677055585/Plannerly/blank-profile-picture-973460_1280-1-705x705_zz7gvv.png",
+    },
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`    
-    timestamps: true
+    timestamps: true,
   }
 );
 

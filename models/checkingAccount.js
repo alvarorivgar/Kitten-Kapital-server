@@ -34,6 +34,14 @@ const checkingAccountSchema = new Schema(
       type: Number,
       default: 10,
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      refPath: "model_type",
+      model_type: {
+        type: String,
+        enum: ["User", "Admin"],
+      }
+    },
   },
   {
     timestamps: true,

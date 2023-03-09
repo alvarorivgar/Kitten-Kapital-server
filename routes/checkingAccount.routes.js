@@ -1,4 +1,4 @@
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isUser} = require("../middlewares/auth.middlewares");
 const { findById } = require("../models/checkingAccount");
 const CheckingAccount = require("../models/checkingAccount");
 
@@ -32,7 +32,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "api/checking/all" => get a list of all accounts
-router.get("/all", isAuthenticated, async (req, res, next) => {
+router.get("/all", isAuthenticated, isUser, async (req, res, next) => {
   try {
     const accountList = await CheckingAccount.find({ owner: req.payload._id });
     res.json(accountList);
@@ -42,7 +42,7 @@ router.get("/all", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "/api/checking/:accountId/details" => details of a single account
-router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
+router.get("/:accountId/details", isAuthenticated, isUser, async (req, res, next) => {
   const { accountId } = req.params;
 
   try {
@@ -57,7 +57,7 @@ router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
 });
 
 // PATCH "/api/checking/:accountId/edit" => edit name of account
-router.patch("/:accountId/edit", isAuthenticated, async (req, res, next) => {
+router.patch("/:accountId/edit", isAuthenticated, isUser, async (req, res, next) => {
   const { accountId } = req.params;
   const { accountName } = req.body;
 
@@ -71,7 +71,7 @@ router.patch("/:accountId/edit", isAuthenticated, async (req, res, next) => {
 });
 
 // PATCH "/api/checking/:accountId/add-money"
-router.patch("/:accountId/add-money", isAuthenticated, async (req, res, next) => {
+router.patch("/:accountId/add-money", isAuthenticated, isUser, async (req, res, next) => {
     const { accountId } = req.params;
     const { moneyToAdd } = req.body;
     try {

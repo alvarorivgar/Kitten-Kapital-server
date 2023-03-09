@@ -1,4 +1,4 @@
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isAdmin} = require("../middlewares/auth.middlewares");
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
@@ -25,7 +25,7 @@ router.post("/create-admin", async (req, res, next) => {
 });
 
 // POST "/api/admin/create-user" => create new user
-router.post("/create-user", isAuthenticated, async (req, res, next) => {
+router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => {
   const { firstName, lastName, email, idNumber, dob, password1, password2 } =
     req.body;
 

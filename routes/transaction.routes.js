@@ -1,4 +1,4 @@
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isUserOrKitty} = require("../middlewares/auth.middlewares");
 const CheckingAccount = require("../models/checkingAccount");
 const KittyAccount = require("../models/kittyAccount");
 const Transaction = require("../models/Transaction.model");
@@ -6,7 +6,7 @@ const Transaction = require("../models/Transaction.model");
 const router = require("express").Router();
 
 // POST "/transaction/create"
-router.post("/create", isAuthenticated, async (req, res, next) => {
+router.post("/create", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   const { origin, destination, amount, subject } = req.body;
 
   await Transaction.create({
@@ -18,7 +18,7 @@ router.post("/create", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "/transaction/:accountId/all" => get all transactions of a given account
-router.get("/:accountId/all", isAuthenticated, async (req, res, next) => {
+router.get("/:accountId/all", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   const { accountId } = req.params;
 
   try {
@@ -30,7 +30,7 @@ router.get("/:accountId/all", isAuthenticated, async (req, res, next) => {
 });
 
 // PATCH "/transaction/transfer"
-router.patch("/transfer", isAuthenticated, async (req, res, next) => {
+router.patch("/transfer", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   console.log(req.body);
 
   const { origin, destination, amount } = req.body;

@@ -1,10 +1,10 @@
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isUserOrKitty} = require("../middlewares/auth.middlewares");
 const User = require("../models/User.model");
 
 const router = require("express").Router();
 
 // GET /profile => show user private profile
-router.get("/", isAuthenticated, async (req, res, next) => {
+router.get("/", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   const { _id } = req.payload;
 
   try {
@@ -16,7 +16,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 });
 
 // PATCH "/profile/edit"
-router.patch("/edit", isAuthenticated, async (req, res, next) => {
+router.patch("/edit", isAuthenticated, isUserOrKitty, async (req, res, next) => {
     const { image, email, password} = req.body
     const { _id } = req.payload;
 

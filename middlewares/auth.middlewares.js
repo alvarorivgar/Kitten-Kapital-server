@@ -20,4 +20,18 @@ const isAuthenticated = expressjwt({
   },
 });
 
-module.exports = isAuthenticated;
+const isUser = (req, res, next) => {req.payload.role === "user" ? next() : res.status(401).json()};
+
+const isKitty = (req, res, next) => {req.payload.role === "kitty" ? next() : res.status(401).json()};
+
+const isAdmin = (req, res, next) => {req.payload.role === "admin" ? next() : res.status(401).json()};
+
+const isUserOrKitty = (req, res, next) => {req.payload.role === "user" || req.payload.role === "kitty" ? next() : res.status(401).json()}
+
+module.exports = {
+  isAuthenticated,
+  isUser,
+  isKitty,
+  isUserOrKitty,
+  isAdmin
+}

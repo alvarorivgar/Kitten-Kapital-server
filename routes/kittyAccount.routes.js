@@ -1,4 +1,4 @@
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isKitty} = require("../middlewares/auth.middlewares");
 const KittyAccount = require("../models/kittyAccount");
 
 const router = require("express").Router();
@@ -20,7 +20,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "api/kitty/all" => get a list of all accounts
-router.get("/all", isAuthenticated, async (req, res, next) => {
+router.get("/all", isAuthenticated, isKitty, async (req, res, next) => {
     try {
       const accountList = await KittyAccount.find({ owner: req.payload._id });
       res.json(accountList);
@@ -30,7 +30,7 @@ router.get("/all", isAuthenticated, async (req, res, next) => {
   });
 
 // GET "/api/kitty/:accountId/details" => details of a single account
-router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
+router.get("/:accountId/details", isAuthenticated, isKitty, async (req, res, next) => {
     const { accountId } = req.params;
   
     try {
@@ -45,7 +45,7 @@ router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
   });
 
 // PATCH "/api/kitty/:accountId/edit" => edit name of account
-router.patch("/:accountId/edit", isAuthenticated, async (req, res, next) => {
+router.patch("/:accountId/edit", isAuthenticated, isKitty, async (req, res, next) => {
     const { accountId } = req.params;
     const { accountName } = req.body;
   
@@ -59,7 +59,7 @@ router.patch("/:accountId/edit", isAuthenticated, async (req, res, next) => {
   });
 
   // PATCH "/api/kitty/:accountId/add-money"
-  router.patch("/:accountId/add-money", isAuthenticated, async (req, res, next) => {
+  router.patch("/:accountId/add-money", isAuthenticated, isKitty, async (req, res, next) => {
       const { accountId } = req.params;
       const { moneyToAdd } = req.body;
       try {

@@ -6,22 +6,29 @@ router.get("/", (req, res, next) => {
 
 // Auth routes
 
-router.use("/auth", require("./auth.routes"))
+router.use("/auth", require("./auth.routes"));
 
 // Admin routes
 
-router.use("/admin", require("./admin.routes"))
+router.use("/admin", require("./admin.routes"));
 
 // Kitty account routes
 
-router.use("/kitty", require("./kittyAccount.routes"))
+router.use("/kitty", require("./kittyAccount.routes"));
 
 // Checking account routes
 
-router.use("/checking", require("./checkingAccount.routes"))
+router.use("/checking", require("./checkingAccount.routes"));
 
 // Transaction routes
 
-router.use("/transaction", require("./transaction.routes"))
+router.use("/transaction", require("./transaction.routes"));
+
+// Profile routes
+router.use("/profile", require("./profile.routes"))
+
+// Image upload route
+
+router.use("/upload", require("./upload.routes"));
 
 module.exports = router;

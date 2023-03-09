@@ -17,12 +17,12 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 
 // PATCH "/profile/edit"
 router.patch("/edit", isAuthenticated, async (req, res, next) => {
-    const { /*image,*/ email, password} = req.body
+    const { image, email, password} = req.body
     const { _id } = req.payload;
 
     try {
         await User.findByIdAndUpdate(_id, {
-            // image,
+            image,
             email,
             password
         })

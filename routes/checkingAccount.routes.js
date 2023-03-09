@@ -70,6 +70,24 @@ router.patch("/:accountId/edit", isAuthenticated, async (req, res, next) => {
   }
 });
 
+// PATCH "/api/checking/:accountId/add-money"
+router.patch("/:accountId/add-money", isAuthenticated, async (req, res, next) => {
+    const { accountId } = req.params;
+    const { moneyToAdd } = req.body;
+    try {
+      const accountToUpdate = await CheckingAccount.findById(accountId);
+
+      await CheckingAccount.findByIdAndUpdate(accountId, {
+        balance: accountToUpdate.balance + Number(moneyToAdd),
+      });
+
+      res.status(200).json();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // DELETE "/api/checking/:id/delete" => delete a specific account (not the one made by the Admin)
 router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
   const { accountId } = req.params;
@@ -78,14 +96,11 @@ router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
 
     foundAccount.createdBy._id.toString() === req.payload._id.toString()
       ? await CheckingAccount.findByIdAndDelete(accountId)
-      : res
-          .status(401)
-          .json({
-            errorMessage: "This account must be deleted by your bank manager",
-          });
+      : res.status(401).json({
+          errorMessage: "This account must be deleted by your bank manager",
+        });
 
     res.status(200).json();
-
   } catch (error) {
     next(error);
   }

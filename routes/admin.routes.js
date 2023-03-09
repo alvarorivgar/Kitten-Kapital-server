@@ -24,6 +24,7 @@ router.post("/create-admin", async (req, res, next) => {
   }
 });
 
+// POST "/api/admin/create-user" => create new user
 router.post("/create-user", isAuthenticated, async (req, res, next) => {
   const { firstName, lastName, email, idNumber, dob, password1, password2 } =
     req.body;
@@ -109,5 +110,7 @@ router.post("/create-user", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
+
+// DELETE USER
 
 module.exports = router;

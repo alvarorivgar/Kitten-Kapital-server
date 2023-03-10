@@ -81,6 +81,10 @@ router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
     const { accountId } = req.params;
     try {
       const foundAccount = await KittyAccount.findById(accountId);
+      
+      if(foundAccount.balance !== 0){
+        return res.status(400).json({errorMessage: "Balance must be 0 to delete an account"})
+      }
   
       foundAccount.createdBy._id.toString() === req.payload._id.toString()
         ? await KittyAccount.findByIdAndDelete(accountId)

@@ -15,7 +15,7 @@ const adminSchema = new Schema(
     },
     role: {
         type: String,
-        default: "Admin"
+        default: "admin"
     }
   },
   {

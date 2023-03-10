@@ -66,7 +66,7 @@ router.patch("/:accountId/edit", isAuthenticated, isKitty, async (req, res, next
         const accountToUpdate = await KittyAccount.findById(accountId);
   
         await KittyAccount.findByIdAndUpdate(accountId, {
-          balance: accountToUpdate.balance + Number(moneyToAdd),
+          balance: accountToUpdate.balance + Number(moneyToAdd * 100),
         });
   
         res.status(200).json();
@@ -81,7 +81,7 @@ router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
     const { accountId } = req.params;
     try {
       const foundAccount = await KittyAccount.findById(accountId);
-      
+
       if(foundAccount.balance !== 0){
         return res.status(400).json({errorMessage: "Balance must be 0 to delete an account"})
       }

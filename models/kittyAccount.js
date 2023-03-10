@@ -9,7 +9,7 @@ const kittyAccountSchema = new Schema(
     },
     balance: {
       type: Number,
-      default: 0,
+      default: 0, // Value is counted in cents
     },
     owner: {
       type: Schema.Types.ObjectId,

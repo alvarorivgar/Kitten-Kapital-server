@@ -9,7 +9,7 @@ const checkingAccountSchema = new Schema(
     },
     balance: {
       type: Number,
-      default: 0,
+      default: 0, // Value is counted in cents
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -17,22 +17,21 @@ const checkingAccountSchema = new Schema(
     },
     transferFee: {
       type: Number,
-      default: 5,
+      default: 500,
     },
     maintenanceFee: {
-      //BONUS
       type: Number,
-      default: 2,
+      default: 200,
     },
     minimumBalance: {
       //BONUS
       type: Number,
-      default: 50,
+      default: 500,
     },
     penaltyFee: {
       //BONUS
       type: Number,
-      default: 10,
+      default: 100,
     },
     createdBy: {
       type: Schema.Types.ObjectId,

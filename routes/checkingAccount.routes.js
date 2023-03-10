@@ -1,5 +1,4 @@
 const {isAuthenticated, isUser} = require("../middlewares/auth.middlewares");
-const { findById } = require("../models/checkingAccount");
 const CheckingAccount = require("../models/checkingAccount");
 
 const router = require("express").Router();
@@ -78,7 +77,7 @@ router.patch("/:accountId/add-money", isAuthenticated, isUser, async (req, res, 
       const accountToUpdate = await CheckingAccount.findById(accountId);
 
       await CheckingAccount.findByIdAndUpdate(accountId, {
-        balance: accountToUpdate.balance + Number(moneyToAdd),
+        balance: accountToUpdate.balance + Number(moneyToAdd * 100),
       });
 
       res.status(200).json();

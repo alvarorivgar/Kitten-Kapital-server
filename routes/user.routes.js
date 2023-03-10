@@ -16,7 +16,7 @@ router.get("/:userId", isAuthenticated, isUserOrKitty, async (req, res, next) =>
 });
 
 // PATCH "/user/edit" => edit user details
-router.patch("/edit", isAuthenticated, isUserOrKitty, async (req, res, next) => {
+router.patch("/:userId/edit", isAuthenticated, isUserOrKitty, async (req, res, next) => {
     const { image, email, password} = req.body
     const { userId } = req.params;
 

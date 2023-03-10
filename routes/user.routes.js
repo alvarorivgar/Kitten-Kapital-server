@@ -3,29 +3,31 @@ const User = require("../models/User.model");
 
 const router = require("express").Router();
 
-// GET /profile => show user private profile
-router.get("/", isAuthenticated, isUserOrKitty, async (req, res, next) => {
-  const { _id } = req.payload;
+// GET /user => find a user by id
+router.get("/:userId", isAuthenticated, isUserOrKitty, async (req, res, next) => {
+  const { userId } = req.params;
 
   try {
-    const foundUser = User.findById(_id);
+    const foundUser = User.findById(userId);
     res.json(foundUser);
   } catch (error) {
     next(error);
   }
 });
 
-// PATCH "/profile/edit"
+// PATCH "/user/edit" => edit user details
 router.patch("/edit", isAuthenticated, isUserOrKitty, async (req, res, next) => {
     const { image, email, password} = req.body
-    const { _id } = req.payload;
+    const { userId } = req.params;
 
     try {
-        await User.findByIdAndUpdate(_id, {
+        await User.findByIdAndUpdate(userId, {
             image,
             email,
             password
         })
+
+        res.status(200).json()
     } catch (error) {
         next(error)
     }

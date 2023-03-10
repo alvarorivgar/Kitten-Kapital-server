@@ -24,8 +24,8 @@ router.use("/checking", require("./checkingAccount.routes"));
 
 router.use("/transaction", require("./transaction.routes"));
 
-// Profile routes
-router.use("/profile", require("./profile.routes"))
+// User routes
+router.use("/user", require("./user.routes"))
 
 // Image upload route
 

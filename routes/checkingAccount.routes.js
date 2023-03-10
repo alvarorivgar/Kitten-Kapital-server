@@ -94,6 +94,10 @@ router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
   try {
     const foundAccount = await CheckingAccount.findById(accountId);
 
+    if(foundAccount.balance !== 0){
+      return res.status(400).json({errorMessage: "Balance must be 0 to delete an account"})
+    }
+
     foundAccount.createdBy._id.toString() === req.payload._id.toString()
       ? await CheckingAccount.findByIdAndDelete(accountId)
       : res.status(401).json({

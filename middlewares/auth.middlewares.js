@@ -24,7 +24,7 @@ const isUser = (req, res, next) => {req.payload.role === "user" ? next() : res.s
 
 const isKitty = (req, res, next) => {req.payload.role === "kitty" ? next() : res.status(401).json()};
 
-const isAdmin = (req, res, next) => {req.payload.role === "admin" ? next() : res.status(401).json()};
+const isAdmin = (req, res, next) => {req.payload.role === "Admin" ? next() : res.status(401).json({message: "no es admin"})};
 
 const isUserOrKitty = (req, res, next) => {req.payload.role === "user" || req.payload.role === "kitty" ? next() : res.status(401).json()}
 

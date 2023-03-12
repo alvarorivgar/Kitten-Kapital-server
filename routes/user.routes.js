@@ -8,7 +8,7 @@ router.get("/:userId", isAuthenticated, isUserOrKitty, async (req, res, next) =>
   const { userId } = req.params;
 
   try {
-    const foundUser = User.findById(userId);
+    const foundUser = await User.findById(userId);
     res.json(foundUser);
   } catch (error) {
     next(error);

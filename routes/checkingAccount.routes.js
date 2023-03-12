@@ -13,6 +13,13 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
     penaltyFee,
   } = req.body;
 
+  // validation no fields are empty
+  if (
+    !accountName
+  ) {
+    return res.status(400).json({ errorMessage: "Account Name field is required" });
+  }
+
   try {
     await CheckingAccount.create({
       accountName,

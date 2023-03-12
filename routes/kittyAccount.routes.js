@@ -6,6 +6,14 @@ const router = require("express").Router();
 // POST "api/kitty/:userId/create" => Create new account
 router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
   const { accountName } = req.body;
+
+  // validation no fields are empty
+  if (
+    !accountName
+  ) {
+    return res.status(400).json({ errorMessage: "Account Name field is required" });
+  }
+
   try {
     await KittyAccount.create({
       accountName,

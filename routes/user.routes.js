@@ -3,12 +3,12 @@ const User = require("../models/User.model");
 
 const router = require("express").Router();
 
-// GET /user => find a user by id
+// GET "/user/:userId"=> find a user by id
 router.get("/:userId", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   const { userId } = req.params;
 
   try {
-    const foundUser = User.findById(userId);
+    const foundUser = await User.findById(userId);
     res.json(foundUser);
   } catch (error) {
     next(error);

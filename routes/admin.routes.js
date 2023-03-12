@@ -5,6 +5,7 @@ const User = require("../models/User.model");
 const Admin = require("../models/Admin.model");
 const CheckingAccount = require("../models/checkingAccount");
 const KittyAccount = require("../models/kittyAccount");
+const { route } = require("./auth.routes");
 
 // Solo para pruebas
 router.post("/create-admin", async (req, res, next) => {
@@ -24,6 +25,17 @@ router.post("/create-admin", async (req, res, next) => {
     next(error);
   }
 });
+
+//GET "/api/admin/users" => get a list of all users
+router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
+  try {
+    const userList = await User.find()
+
+    res.json(userList)
+  } catch (error) {
+    next(error)
+  }
+})
 
 // POST "/api/admin/create-user" => create new user
 router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => {

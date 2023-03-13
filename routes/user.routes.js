@@ -8,7 +8,7 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
   const { userId } = req.params;
 
   try {
-    const foundUser = await User.findById(userId);
+    const foundUser = await User.findById(userId).populate("manager", "fullName");
     res.json(foundUser);
   } catch (error) {
     next(error);

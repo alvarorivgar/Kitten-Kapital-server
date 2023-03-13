@@ -37,6 +37,19 @@ router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
   }
 })
 
+// GET "/api/admin/my-clients" => get a list of users created by specific admin
+router.get("/my-users", isAuthenticated, isAdmin, async (req,res,next)=>{
+  const {adminId} = req.payload._id
+  
+  try {
+    const clientsList = await User.findById(adminId)
+    res.status(200).json(clientsList)
+
+  } catch (error) {
+    next(error)
+  }
+})
+
 // POST "/api/admin/create-user" => create new user
 router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => {
     const { firstName, lastName, email, idNumber, dob, password1, password2 } = req.body;

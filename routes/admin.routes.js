@@ -119,7 +119,7 @@ router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => 
         : (role = "user");
 
       // Create user
-      await User.create({
+      const createdUser = await User.create({
         firstName,
         lastName,
         email,
@@ -130,7 +130,7 @@ router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => 
         manager: req.payload._id,
       });
 
-      res.status(201).json();
+      return res.status(201).json(createdUser);
     } catch (error) {
       next(error);
     }

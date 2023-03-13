@@ -8,7 +8,7 @@ const KittyAccount = require("../models/kittyAccount");
 
 // Solo para pruebas
 router.post("/create-admin", async (req, res, next) => {
-  const { idNumber, password } = req.body;
+  const { idNumber, password, fullName } = req.body;
 
   try {
     const salt = await bcrypt.genSalt(12);
@@ -17,6 +17,7 @@ router.post("/create-admin", async (req, res, next) => {
     await Admin.create({
       idNumber,
       password: hashedPassword,
+      fullName
     });
 
     res.status(201).json();

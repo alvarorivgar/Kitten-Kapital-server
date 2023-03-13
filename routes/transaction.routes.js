@@ -9,12 +9,17 @@ const router = require("express").Router();
 router.post("/create", isAuthenticated, isUserOrKitty, async (req, res, next) => {
   const { origin, destination, amount, subject } = req.body;
 
+ 
+try {
   await Transaction.create({
     origin,
     destination,
     amount,
     subject,
-  });
+  });  
+} catch (error) {
+  next(error);
+}
 });
 
 // GET "/transaction/:accountId/all" => get all transactions of a given account

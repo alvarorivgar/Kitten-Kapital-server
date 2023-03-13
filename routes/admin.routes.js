@@ -42,7 +42,7 @@ router.get("/my-clients", isAuthenticated, isAdmin, async (req,res,next)=>{
   const {_id} = req.payload
   
   try {
-    const clientsList = await User.findById({manager:_id})
+    const clientsList = await User.find({manager:_id})
     res.status(200).json(clientsList)
 
   } catch (error) {

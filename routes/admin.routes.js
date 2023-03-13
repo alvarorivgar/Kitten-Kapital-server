@@ -38,7 +38,7 @@ router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
 })
 
 // GET "/api/admin/my-clients" => get a list of users created by specific admin
-router.get("/my-users", isAuthenticated, isAdmin, async (req,res,next)=>{
+router.get("/my-clients", isAuthenticated, isAdmin, async (req,res,next)=>{
   const {adminId} = req.payload._id
   
   try {

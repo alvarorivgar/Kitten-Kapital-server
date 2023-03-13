@@ -5,7 +5,6 @@ const User = require("../models/User.model");
 const Admin = require("../models/Admin.model");
 const CheckingAccount = require("../models/checkingAccount");
 const KittyAccount = require("../models/kittyAccount");
-const { route } = require("./auth.routes");
 
 // Solo para pruebas
 router.post("/create-admin", async (req, res, next) => {
@@ -29,7 +28,7 @@ router.post("/create-admin", async (req, res, next) => {
 //GET "/api/admin/users" => get a list of all users
 router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
   try {
-    const userList = await User.find()
+    const userList = await User.find().select({idNumber: true, firstName: true, lastName: true, role: true})
 
     res.json(userList)
   } catch (error) {

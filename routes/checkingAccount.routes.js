@@ -1,4 +1,4 @@
-const {isAuthenticated, isUser} = require("../middlewares/auth.middlewares");
+const {isAuthenticated, isUser, isAdmin} = require("../middlewares/auth.middlewares");
 const CheckingAccount = require("../models/checkingAccount");
 
 const router = require("express").Router();
@@ -38,9 +38,10 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "api/checking/all" => get a list of all accounts
-router.get("/all", isAuthenticated, isUser, async (req, res, next) => {
+router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
+  const {userId} = req.params
   try {
-    const accountList = await CheckingAccount.find({ owner: req.payload._id });
+    const accountList = await CheckingAccount.find({ owner: userId });
     res.json(accountList);
   } catch (error) {
     next(error);

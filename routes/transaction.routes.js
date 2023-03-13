@@ -27,7 +27,7 @@ router.get("/:accountId/all", isAuthenticated, isUserOrKitty, async (req, res, n
   const { accountId } = req.params;
 
   try {
-    const transactionList = await Transaction.find({ origin: accountId });
+    const transactionList = await Transaction.find({ origin: accountId, destination: accountId });
     res.json(transactionList);
   } catch (error) {
     next(error);

@@ -28,9 +28,10 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "api/kitty/all" => get a list of all accounts
-router.get("/all", isAuthenticated, isKitty, async (req, res, next) => {
+router.get("/:userId/all", isAuthenticated, isKitty, async (req, res, next) => {
+    const {userId} = req.params
     try {
-      const accountList = await KittyAccount.find({ owner: req.payload._id });
+      const accountList = await KittyAccount.find({ owner: userId });
       res.json(accountList);
     } catch (error) {
       next(error);

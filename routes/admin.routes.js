@@ -38,11 +38,11 @@ router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
 })
 
 // GET "/api/admin/my-clients" => get a list of users created by specific admin
-router.get("/my-users", isAuthenticated, isAdmin, async (req,res,next)=>{
-  const {adminId} = req.payload._id
+router.get("/my-clients", isAuthenticated, isAdmin, async (req,res,next)=>{
+  const {_id} = req.payload
   
   try {
-    const clientsList = await User.findById(adminId)
+    const clientsList = await User.findById({manager:_id})
     res.status(200).json(clientsList)
 
   } catch (error) {

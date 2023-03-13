@@ -39,7 +39,9 @@ router.get(
     const { accountId } = req.params;
 
     try {
-      const transactionList = await Transaction.find({ origin: accountId, destination: accountId });
+      const transactionList = await Transaction.find({
+        $or: [{ origin: accountId }, { destination: accountId }],
+      });
       res.json(transactionList);
     } catch (error) {
       next(error);
@@ -57,8 +59,11 @@ router.patch(
 
     if (!origin || !destination) {
       return res.status(400).json({ errorMessage: "Please select an account" });
-    } if (amount <= 0){
-      return res.status(400).json({ errorMessage: "Please select a valid amount" });
+    }
+    if (amount <= 0) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please select a valid amount" });
     }
     console.log(destination);
 

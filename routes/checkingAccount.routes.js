@@ -56,9 +56,13 @@ router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
 router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
   const { accountId } = req.params;
   try {
-    const foundAccount = await CheckingAccount.findById(accountId);
+    const foundAccount = await CheckingAccount.findById(accountId).populate(
+      "owner",
+      "role"
+    );
+
     if (req.payload.role === "kitty") {
-      return res.json()
+      return res.json();
     }
     req.payload.role === "admin" ||
     foundAccount.owner._id.toString() === req.payload._id.toString()
@@ -115,19 +119,24 @@ router.patch(
 router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
   const { accountId } = req.params;
   try {
-    const foundAccount = await CheckingAccount.findById(accountId);
+    const foundAccount = await CheckingAccount.findById(accountId).populate(
+      "owner",
+      "role"
+    );
 
-    if (foundAccount.balance !== 0) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Balance must be 0 to delete an account" });
+    if (foundAccount.createdBy._id.toString() === req.payload._id.toString()) {
+      if (foundAccount.balance !== 0) {
+        return res
+          .status(400)
+          .json({ errorMessage: "Balance must be 0 to delete an account" });
+      } else {
+        await CheckingAccount.findByIdAndDelete(accountId);
+      }
+    } else {
+      res.status(400).json({
+        errorMessage: "This account must be deleted by your bank manager",
+      });
     }
-
-    foundAccount.createdBy._id.toString() === req.payload._id.toString()
-      ? await CheckingAccount.findByIdAndDelete(accountId)
-      : res.status(401).json({
-          errorMessage: "This account must be deleted by your bank manager",
-        });
 
     res.status(200).json();
   } catch (error) {

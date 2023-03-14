@@ -1,4 +1,8 @@
-const {isAuthenticated, isUser, isAdmin} = require("../middlewares/auth.middlewares");
+const {
+  isAuthenticated,
+  isUser,
+  isAdmin,
+} = require("../middlewares/auth.middlewares");
 const CheckingAccount = require("../models/checkingAccount");
 
 const router = require("express").Router();
@@ -14,10 +18,10 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
   } = req.body;
 
   // validation no fields are empty
-  if (
-    !accountName
-  ) {
-    return res.status(400).json({ errorMessage: "Account Name field is required" });
+  if (!accountName) {
+    return res
+      .status(400)
+      .json({ errorMessage: "Account Name field is required" });
   }
 
   try {
@@ -39,7 +43,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
 
 // GET "api/checking/all" => get a list of all accounts
 router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
-  const {userId} = req.params
+  const { userId } = req.params;
   try {
     const accountList = await CheckingAccount.find({ owner: userId });
     res.json(accountList);
@@ -49,36 +53,46 @@ router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
 });
 
 // GET "/api/checking/:accountId/details" => details of a single account
-router.get("/:accountId/details", isAuthenticated, isUser, async (req, res, next) => {
+router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
   const { accountId } = req.params;
-
   try {
     const foundAccount = await CheckingAccount.findById(accountId);
 
+    req.payload.role === "admin" ||
     foundAccount.owner._id.toString() === req.payload._id.toString()
       ? res.json(foundAccount)
       : res.status(401).json();
+    // console.log("hola hola " + foundAccount);
   } catch (error) {
     next(error);
   }
 });
 
 // PATCH "/api/checking/:accountId/edit" => edit name of account
-router.patch("/:accountId/edit", isAuthenticated, isUser, async (req, res, next) => {
-  const { accountId } = req.params;
-  const { accountName } = req.body;
+router.patch(
+  "/:accountId/edit",
+  isAuthenticated,
+  isUser,
+  async (req, res, next) => {
+    const { accountId } = req.params;
+    const { accountName } = req.body;
 
-  try {
-    await CheckingAccount.findByIdAndUpdate(accountId, { accountName });
+    try {
+      await CheckingAccount.findByIdAndUpdate(accountId, { accountName });
 
-    res.status(202).json();
-  } catch (error) {
-    next(error);
+      res.status(202).json();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // PATCH "/api/checking/:accountId/add-money"
-router.patch("/:accountId/add-money", isAuthenticated, isUser, async (req, res, next) => {
+router.patch(
+  "/:accountId/add-money",
+  isAuthenticated,
+  isUser,
+  async (req, res, next) => {
     const { accountId } = req.params;
     const { moneyToAdd } = req.body;
     try {
@@ -101,8 +115,10 @@ router.delete("/:accountId/delete", isAuthenticated, async (req, res, next) => {
   try {
     const foundAccount = await CheckingAccount.findById(accountId);
 
-    if(foundAccount.balance !== 0){
-      return res.status(400).json({errorMessage: "Balance must be 0 to delete an account"})
+    if (foundAccount.balance !== 0) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Balance must be 0 to delete an account" });
     }
 
     foundAccount.createdBy._id.toString() === req.payload._id.toString()

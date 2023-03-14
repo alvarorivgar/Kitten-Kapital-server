@@ -34,7 +34,6 @@ router.post(
 router.get(
   "/:accountId/all",
   isAuthenticated,
-  isUserOrKitty,
   async (req, res, next) => {
     const { accountId } = req.params;
 

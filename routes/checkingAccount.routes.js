@@ -57,7 +57,9 @@ router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
   const { accountId } = req.params;
   try {
     const foundAccount = await CheckingAccount.findById(accountId);
-
+    if (req.payload.role === "kitty") {
+      return res.json()
+    }
     req.payload.role === "admin" ||
     foundAccount.owner._id.toString() === req.payload._id.toString()
       ? res.json(foundAccount)

@@ -36,7 +36,8 @@ router.post("/login", async (req, res, next) => {
       idNumber: foundUser.idNumber,
       role: foundUser.role,
       firstName: foundUser.firstName,
-      image: foundUser.image
+      image: foundUser.image,
+      email: foundUser.email
     };
 
     // Generate token

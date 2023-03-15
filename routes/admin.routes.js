@@ -105,7 +105,6 @@ router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => 
       const hashedPassword = await bcrypt.hash(password1, salt);
 
       // Assign role depending on user age
-
       // We calculate the number of milliseconds and add 1970 since Date.now() returns the number of miliseconds passed since 01/01/1970
       const minute = 1000 * 60;
       const hour = minute * 60;

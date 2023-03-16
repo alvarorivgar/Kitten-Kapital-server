@@ -10,7 +10,7 @@ router.post("/", uploader.single("image"), (req, res, next) => {
     return;
   }
 
-  res.json({ imageUrl: req.file.path });
+  res.json({ image: req.file.path });
 });
 
 module.exports = router;

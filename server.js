@@ -8,31 +8,30 @@ const PORT = process.env.PORT || 5005;
 const myServer = app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
-// const http = require("http")
-// const server = http.createServer(app)
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
 
 const io = new Server(myServer, {
-  	cors: {
-  		origin: process.env.ORIGIN || "http://localhost:3000",
-  	}
-  })
-//   console.log(io);
-  io.on("connection", (socket) => {
-    socket.emit("me", socket.id)
-    console.log("hola patata");
+  cors: {
+    origin: process.env.ORIGIN || "http://localhost:3000",
+  },
+});
 
-	socket.on("disconnect", () => {
-		socket.broadcast.emit("callEnded")
-	})
+io.on("connection", (socket) => {
+  socket.emit("me", socket.id);
 
-	socket.on("callUser", (data) => {
-		io.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
-	})
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("callEnded");
+  });
 
-	socket.on("answerCall", (data) => {
-		io.to(data.to).emit("callAccepted", data.signal)
-	})
-})
+  socket.on("callUser", (data) => {
+    io.to(data.userToCall).emit("callUser", {
+      signal: data.signalData,
+      from: data.from,
+      name: data.name,
+    });
+  });
 
-
+  socket.on("answerCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
+  });
+});

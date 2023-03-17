@@ -64,7 +64,6 @@ router.patch(
         .status(400)
         .json({ errorMessage: "Please select a valid amount" });
     }
-    console.log(destination);
 
     try {
       const sender =
@@ -74,8 +73,6 @@ router.patch(
       const receiver =
         (await CheckingAccount.findById(destination)) ||
         (await KittyAccount.findById(destination));
-
-      console.log("hola amigo receiver", receiver);
 
       // User can only transfer money from their own accounts
       if (sender.owner._id.toString() !== req.payload._id.toString()) {

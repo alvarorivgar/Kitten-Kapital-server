@@ -6,7 +6,7 @@ const Admin = require("../models/Admin.model");
 const CheckingAccount = require("../models/checkingAccount");
 const KittyAccount = require("../models/kittyAccount");
 
-// Solo para pruebas
+// Access not protected so we can create first admin
 router.post("/create-admin", async (req, res, next) => {
   const { idNumber, password, fullName } = req.body;
 
@@ -17,7 +17,7 @@ router.post("/create-admin", async (req, res, next) => {
     await Admin.create({
       idNumber,
       password: hashedPassword,
-      fullName
+      fullName,
     });
 
     res.status(201).json();
@@ -29,30 +29,39 @@ router.post("/create-admin", async (req, res, next) => {
 //GET "/api/admin/users" => get a list of all users
 router.get("/users", isAuthenticated, isAdmin, async (req, res, next) => {
   try {
-    const userList = await User.find().select({idNumber: true, firstName: true, lastName: true, role: true})
+    const userList = await User.find().select({
+      idNumber: true,
+      firstName: true,
+      lastName: true,
+      role: true,
+    });
 
-    res.json(userList)
+    res.json(userList);
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
+});
 
 // GET "/api/admin/my-clients" => get a list of users created by specific admin
-router.get("/my-clients", isAuthenticated, isAdmin, async (req,res,next)=>{
-  const {_id} = req.payload
-  
-  try {
-    const clientsList = await User.find({manager:_id})
-    res.status(200).json(clientsList)
+router.get("/my-clients", isAuthenticated, isAdmin, async (req, res, next) => {
+  const { _id } = req.payload;
 
+  try {
+    const clientsList = await User.find({ manager: _id });
+    res.status(200).json(clientsList);
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
+});
 
 // POST "/api/admin/create-user" => create new user
-router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => {
-    const { firstName, lastName, email, idNumber, dob, password1, password2 } = req.body;
+router.post(
+  "/create-user",
+  isAuthenticated,
+  isAdmin,
+  async (req, res, next) => {
+    const { firstName, lastName, email, idNumber, dob, password1, password2 } =
+      req.body;
 
     // No fields are empty
     if (
@@ -136,8 +145,12 @@ router.post("/create-user", isAuthenticated, isAdmin, async (req, res, next) => 
   }
 );
 
-// DELETE "/:userId/delete" => delete user
-router.delete("/:userId/delete", isAuthenticated, isAdmin, async (req, res, next) => {
+// DELETE "/:userId/delete" => delete a single user
+router.delete(
+  "/:userId/delete",
+  isAuthenticated,
+  isAdmin,
+  async (req, res, next) => {
     const { userId } = req.params;
 
     try {
@@ -145,22 +158,29 @@ router.delete("/:userId/delete", isAuthenticated, isAdmin, async (req, res, next
 
       let userAccounts;
 
-      if( foundUser.role === "kitty"){
-         userAccounts = await KittyAccount.find({owner: foundUser._id})
+      if (foundUser.role === "kitty") {
+        userAccounts = await KittyAccount.find({ owner: foundUser._id });
 
-         if(userAccounts.length !== 0){
-          return res.status(400).json({errorMessage: "Remove user's accounts before deleting user"})
-         }
+        if (userAccounts.length !== 0) {
+          return res
+            .status(400)
+            .json({
+              errorMessage: "Remove user's accounts before deleting user",
+            });
+        }
+      } else if (foundUser.role === "user") {
+        userAccounts = await CheckingAccount.find({ owner: foundUser._id });
 
-      } else if (foundUser.role === "user"){
-         userAccounts = await CheckingAccount.find({owner: foundUser._id})
-
-         if(userAccounts.length !== 0){
-          return res.status(400).json({errorMessage: "Remove user's accounts before deleting user"})
-         }
+        if (userAccounts.length !== 0) {
+          return res
+            .status(400)
+            .json({
+              errorMessage: "Remove user's accounts before deleting user",
+            });
+        }
       }
 
-      await User.findByIdAndDelete(userId)
+      await User.findByIdAndDelete(userId);
 
       res.status(200).json();
     } catch (error) {

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
 const Admin = require("../models/Admin.model");
 
 // POST "/api/auth/login" => Validate user credentials
@@ -16,7 +16,9 @@ router.post("/login", async (req, res, next) => {
 
   try {
     // User exists in DB
-    const foundUser = await User.findOne({ idNumber: idNumber }) || await Admin.findOne({ idNumber: idNumber }) ;
+    const foundUser =
+      (await User.findOne({ idNumber: idNumber })) ||
+      (await Admin.findOne({ idNumber: idNumber }));
     if (!foundUser) {
       return res.status(400).json({ errorMessage: "Invalid credentials" });
     }
@@ -37,7 +39,7 @@ router.post("/login", async (req, res, next) => {
       role: foundUser.role,
       firstName: foundUser.firstName,
       image: foundUser.image,
-      email: foundUser.email
+      email: foundUser.email,
     };
 
     // Generate token
@@ -55,8 +57,6 @@ router.post("/login", async (req, res, next) => {
 // GET "/api/auth/verify" => Verify if user is active
 router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
-  console.log(req.payload);
 });
-
 
 module.exports = router;

@@ -20,18 +20,34 @@ const isAuthenticated = expressjwt({
   },
 });
 
-const isUser = (req, res, next) => {req.payload.role === "user" ? next() : res.status(401).json({message: "no e suser"})};
+const isUser = (req, res, next) => {
+  req.payload.role === "user"
+    ? next()
+    : res.status(401).json({ message: "no e suser" });
+};
 
-const isKitty = (req, res, next) => {req.payload.role === "kitty" ? next() : res.status(401).json({message: "no es kitty"})};
+const isKitty = (req, res, next) => {
+  req.payload.role === "kitty"
+    ? next()
+    : res.status(401).json({ message: "no es kitty" });
+};
 
-const isAdmin = (req, res, next) => {req.payload.role === "admin" ? next() : res.status(401).json({message: "no es admin"})};
+const isAdmin = (req, res, next) => {
+  req.payload.role === "admin"
+    ? next()
+    : res.status(401).json({ message: "no es admin" });
+};
 
-const isUserOrKitty = (req, res, next) => {req.payload.role === "user" || req.payload.role === "kitty" ? next() : res.status(401).json()}
+const isUserOrKitty = (req, res, next) => {
+  req.payload.role === "user" || req.payload.role === "kitty"
+    ? next()
+    : res.status(401).json();
+};
 
 module.exports = {
   isAuthenticated,
   isUser,
   isKitty,
   isUserOrKitty,
-  isAdmin
-}
+  isAdmin,
+};

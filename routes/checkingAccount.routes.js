@@ -1,8 +1,4 @@
-const {
-  isAuthenticated,
-  isUser,
-  isAdmin,
-} = require("../middlewares/auth.middlewares");
+const { isAuthenticated, isUser } = require("../middlewares/auth.middlewares");
 const CheckingAccount = require("../models/checkingAccount");
 
 const router = require("express").Router();
@@ -17,7 +13,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
     penaltyFee,
   } = req.body;
 
-  // validation no fields are empty
+  // Name field is not empty
   if (!accountName) {
     return res
       .status(400)
@@ -41,7 +37,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// GET "api/checking/all" => get a list of all accounts
+// GET "api/checking/:userId/all" => get a list of all accounts of a single user
 router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -68,7 +64,6 @@ router.get("/:accountId/details", isAuthenticated, async (req, res, next) => {
     foundAccount.owner._id.toString() === req.payload._id.toString()
       ? res.json(foundAccount)
       : res.status(401).json();
-    // console.log("hola hola " + foundAccount);
   } catch (error) {
     next(error);
   }

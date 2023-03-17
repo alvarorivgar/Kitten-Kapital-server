@@ -7,7 +7,7 @@ const router = require("express").Router();
 router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
   const { accountName } = req.body;
 
-  // validation no fields are empty
+  // Name field is not empty
   if (!accountName) {
     return res
       .status(400)
@@ -27,7 +27,7 @@ router.post("/:userId/create", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// GET "api/kitty/all" => get a list of all accounts
+// GET "api/kitty/:userId/all" => get a list of all accounts of a single user
 router.get("/:userId/all", isAuthenticated, async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -76,7 +76,7 @@ router.patch(
   }
 );
 
-// PATCH "/api/kitty/:accountId/add-money"
+// PATCH "/api/kitty/:accountId/add-money" => add money to account balance
 router.patch(
   "/:accountId/add-money",
   isAuthenticated,

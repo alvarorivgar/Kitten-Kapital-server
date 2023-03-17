@@ -22,7 +22,7 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// PATCH "/user/edit-email" => edit user email
+// PATCH "/user/:userId/edit-email" => edit user email
 router.patch(
   "/:userId/edit-email",
   isAuthenticated,
@@ -38,9 +38,13 @@ router.patch(
         return res.status(400).json({ errorMessage: "Email already exists" });
       }
 
-      const updatedUser = await User.findByIdAndUpdate(userId, {
-        email,
-      }, {new: true});
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          email,
+        },
+        { new: true }
+      );
 
       res.status(200).json(updatedUser);
     } catch (error) {
@@ -49,7 +53,7 @@ router.patch(
   }
 );
 
-//
+// PATCH "/user/:userId/edit-password" => edit user password
 router.patch(
   "/:userId/edit-password",
   isAuthenticated,
@@ -88,6 +92,7 @@ router.patch(
   }
 );
 
+// PATCH "/user/:userId/edit-image" => edit user image
 router.patch(
   "/:userId/edit-image",
   isAuthenticated,
@@ -97,9 +102,13 @@ router.patch(
     const { userId } = req.params;
 
     try {
-      const updatedUser = await User.findByIdAndUpdate(userId, {
-        image,
-      }, {new: true});
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          image,
+        },
+        { new: true }
+      );
 
       res.status(200).json(updatedUser);
     } catch (error) {

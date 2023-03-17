@@ -3,9 +3,10 @@ const CheckingAccount = require("../models/checkingAccount");
 const CronJob = require("cron").CronJob;
 
 const monthlyFeeJob = new CronJob(
-  "* 2 * * * *", // seconds, minutes, hours, day of month, month, day of week
+  "10 * * * * *", // seconds, minutes, hours, day of month, month, day of week
   function () {
     applyMonthlyFees();
+    console.log("hola holita");
   },
   null,
   true,
@@ -14,6 +15,7 @@ const monthlyFeeJob = new CronJob(
 
 const applyMonthlyFees = async () => {
   try {
+    console.log("hola cron");
     const checkingList = await CheckingAccount.find();
 
     checkingList.forEach(async (checking) => {

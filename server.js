@@ -14,10 +14,10 @@ const { Server } = require("socket.io")
 
 const io = new Server(myServer, {
   	cors: {
-  		origin: process.env.ORIGIN,
+  		origin: process.env.ORIGIN || "http://localhost:3000",
   	}
   })
-  
+//   console.log(io);
   io.on("connection", (socket) => {
     socket.emit("me", socket.id)
     console.log("hola patata");
